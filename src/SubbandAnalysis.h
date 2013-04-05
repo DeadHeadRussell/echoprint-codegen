@@ -9,6 +9,7 @@
 #include "Common.h"
 #include "Params.h"
 #include "MatrixUtility.h"
+#include "AudioStreamInput.h"
 
 #define C_LEN 128
 #define SUBBANDS 8
@@ -36,15 +37,20 @@ namespace SubbandFilterBank {
         -0.000009060, -0.000006199, -0.000003815, -0.000002384, -0.000001431, -0.000000954, -0.000000477, 0};
 }
 
-class AudioStreamInput;
-
 class SubbandAnalysis {
 public:
     inline SubbandAnalysis() {};
-    SubbandAnalysis(AudioStreamInput* pAudio);
-    SubbandAnalysis(const float* pSamples, uint numSamples);
-    virtual ~SubbandAnalysis();
-    void Compute();
+
+    SubbandAnalysis(AudioStreamInput* pAudio) {
+      _pSamples = pAudio->getSamples();
+      _NumSamples = pAudio->getNumSamples();
+    }
+
+    SubbandAnalysis(const float* pSamples, uint numSamples) :
+      _pSamples(pSamples), _NumSamples(numSamples) {} 
+
+    virtual ~SubbandAnalysis() {}
+    virtual void Compute() = 0;
 public:
     inline uint getNumFrames() const {return _NumFrames;}
     inline uint getNumBands() const {return SUBBANDS;}
@@ -54,11 +60,20 @@ protected:
     const float* _pSamples;
     uint _NumSamples;
     uint _NumFrames;
-    matrix_f _Mi;
-    matrix_f _Mr;
     matrix_f _Data;
+};
+
+class FilterBank : public SubbandAnalysis {
+public:
+    FilterBank(AudioStreamInput* pAudio);
+    FilterBank(const float* pSamples, uint numSamples);
+    virtual ~FilterBank() {}
+    virtual void Compute();
 
 private:
+    matrix_f _Mi;
+    matrix_f _Mr;
+
     void Init();
 };
 

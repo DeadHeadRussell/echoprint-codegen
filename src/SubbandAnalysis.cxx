@@ -11,21 +11,17 @@
 #include "win_funcs.h"
 #endif
 
-SubbandAnalysis::SubbandAnalysis(AudioStreamInput* pAudio) {
-    _pSamples = pAudio->getSamples();
-    _NumSamples = pAudio->getNumSamples();
+FilterBank::FilterBank(AudioStreamInput* pAudio) :
+    SubbandAnalysis(pAudio) {
     Init();
 }
 
-SubbandAnalysis::SubbandAnalysis(const float* pSamples, uint numSamples) :
-    _pSamples(pSamples), _NumSamples(numSamples) {
+FilterBank::FilterBank(const float* pSamples, uint numSamples) :
+    SubbandAnalysis(pSamples, numSamples) {
     Init();
 }
 
-SubbandAnalysis::~SubbandAnalysis() {
-}
-
-void SubbandAnalysis::Init() {
+void FilterBank::Init() {
     // Calculate the analysis filter bank coefficients
     _Mr = matrix_f(M_ROWS, M_COLS);
     _Mi = matrix_f(M_ROWS, M_COLS);
@@ -37,7 +33,7 @@ void SubbandAnalysis::Init() {
     }
 }
 
-void SubbandAnalysis::Compute() {
+void FilterBank::Compute() {
     uint t, i, j;
 
     float Z[C_LEN];

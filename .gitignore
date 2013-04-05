@@ -1,3 +1,7 @@
 *.o
 *.dylib
 *.so
+*.exe
+echoprint-codegen
+libcodegen*
+

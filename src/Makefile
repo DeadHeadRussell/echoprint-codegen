@@ -14,7 +14,7 @@ TAGLIB_CFLAGS=`taglib-config --cflags`
 TAGLIB_LIBS=`taglib-config --libs`
 CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
 CFLAGS=-Wall -fPIC $(OPTFLAGS)
-LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread $(OPTFLAGS)
+LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread -lfftw3 $(OPTFLAGS)
 LIBNAME=libcodegen.so
 SONAME=$(LIBNAME).$(VERSION_MAJ)
 
@@ -26,6 +26,8 @@ MODULES_LIB = \
     Fingerprint.o \
     MatrixUtility.o \
     SubbandAnalysis.o \
+		StockwellTransform.o \
+		gft.o \
     Whitening.o
 MODULES = $(MODULES_LIB) Metadata.o
 
@@ -37,7 +39,7 @@ ifeq ($(UNAME),Darwin)
 		-macosx_version_min 10.6 -current_version $(VERSION) -o libcodegen.$(VERSION).dylib -undefined suppress \
 	    $(MODULES_LIB) -framework vecLib -framework Accelerate
 else
-	$(CXX) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBNAME).$(VERSION) $(MODULES_LIB) -lz
+	$(CXX) -shared -fPIC -Wl,-soname,$(SONAME) -o $(LIBNAME).$(VERSION) $(MODULES_LIB) -lz -lfftw3
 endif
 
 echoprint-codegen: $(MODULES) main.o
