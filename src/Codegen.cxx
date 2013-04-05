@@ -17,8 +17,6 @@
 #include "Common.h"
 #include "StockwellTransform.h"
 
-//#define ST
-
 #include "Base64.h"
 #include <zlib.h>
 
