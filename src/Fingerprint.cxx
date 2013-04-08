@@ -72,7 +72,7 @@ uint Fingerprint::adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_fo
         ham[i] = .5 - .5*cos( (2.*M_PI/(nsm-1))*i);
 
     int nc =  floor((float)E.size2()/(float)hop)-(floor((float)nsm/(float)hop)-1);
-    matrix_f Eb = matrix_f(nc, 8);
+    Eb = matrix_f(nc, 8);
     for(uint r=0;r<Eb.size1();r++) for(uint c=0;c<Eb.size2();c++) Eb(r,c) = 0.0;
 
     for(i=0;i<nc;i++) {
@@ -193,7 +193,8 @@ void Fingerprint::Compute() {
         if (onset_counter_for_band[band]>2) {
             for(uint onset=0;onset<onset_counter_for_band[band]-2;onset++) {
                 // What time was this onset at?
-                uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(out(band,onset));
+                uint frame = out(band,onset);
+                uint time_for_onset_ms_quantized = quantized_time_for_frame_absolute(frame);
 
                 uint p[2][6];
                 for (int i = 0; i < 6; i++) {
@@ -234,6 +235,10 @@ void Fingerprint::Compute() {
 
                     // Set the code alongside the time of onset
                     _Codes[actual_codes++] = FPCode(time_for_onset_ms_quantized, hashed_code);
+#ifdef TEST
+                    _Codes[actual_codes - 1].band = band;
+                    _Codes[actual_codes - 1].frame_actual = frame;
+#endif
                     //fprintf(stderr, "whee %d,%d: [%d, %d] (%d, %d), %d = %u at %d\n", actual_codes, k, time_delta0, time_delta1, p[0][k], p[1][k], band, hashed_code, time_for_onset_ms_quantized);
                 }
             }

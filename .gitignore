@@ -5,3 +5,7 @@
 echoprint-codegen
 libcodegen*
 
+*.wav
+*.onsets
+*.subband
+

@@ -4,13 +4,17 @@
 
 #include "gft.h"
 
-#include <cstdio>
+StockwellTransform::StockwellTransform(AudioStreamInput* pAudio) :
+  SubbandAnalysis(pAudio) {}
+
+StockwellTransform::StockwellTransform(const float* pSamples, uint numSamples) :
+  SubbandAnalysis(pSamples, numSamples) {}
 
 void StockwellTransform::Compute() {
   static const uint hop = pow(2, SUBBANDS + 1);
 
   int* partitions = gft_1dPartitions(hop);
-  double* window = windows(hop, box);
+  double* window = gft_windows(hop, gft_box);
 
   _NumFrames = (_NumSamples - hop + 1) / SUBBANDS;
   _Data = matrix_f(SUBBANDS, _NumFrames);

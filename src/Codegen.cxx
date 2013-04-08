@@ -31,11 +31,12 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     pWhitening->Compute();
 
     AudioBufferInput *pAudio = new AudioBufferInput();
-    pAudio->SetBuffer(pWhitening->getWhitenedSamples(), pWhitening->getNumSamples());
 
-#ifdef ST
+#if ECHOPRINT_VERSION == 413
+    pAudio->SetBuffer(pcm, numSamples);
     SubbandAnalysis *pSubbandAnalysis = new StockwellTransform(pAudio);
 #else
+    pAudio->SetBuffer(pWhitening->getWhitenedSamples(), pWhitening->getNumSamples());
     SubbandAnalysis *pSubbandAnalysis = new FilterBank(pAudio);
 #endif
     pSubbandAnalysis->Compute();
@@ -45,6 +46,11 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
 
     _CodeString = createCodeString(pFingerprint->getCodes());
     _NumCodes = pFingerprint->getCodes().size();
+
+#ifdef TEST
+    _Spectrogram = pSubbandAnalysis->getMatrix();
+    _Codes = pFingerprint->getCodes();
+#endif
 
     delete pFingerprint;
     delete pSubbandAnalysis;

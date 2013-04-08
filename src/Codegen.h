@@ -9,16 +9,12 @@
 
 // Entry point for generating codes from PCM data.
 
-//#define ST
-
-#ifdef ST
-#define ECHOPRINT_VERSION 4.12
-#else
-#define ECHOPRINT_VERSION 4.13
-#endif
-
 #include <string>
 #include <vector>
+
+#ifndef ECHOPRINT_VERSION
+#define ECHOPRINT_VERSION 412
+#endif
 
 #ifdef _MSC_VER
     #ifdef CODEGEN_EXPORTS
@@ -32,6 +28,10 @@
     #define CODEGEN_API
 #endif
 
+#ifdef TEST
+#include "Fingerprint.h"
+#endif
+
 class Fingerprint;
 class SubbandAnalysis;
 struct FPCode;
@@ -42,7 +42,7 @@ public:
 
     std::string getCodeString(){return _CodeString;}
     int getNumCodes(){return _NumCodes;}
-    static double getVersion() { return ECHOPRINT_VERSION; }
+    static double getVersion() { return ECHOPRINT_VERSION / 100.0; }
 private:
     Fingerprint* computeFingerprint(SubbandAnalysis *pSubbandAnalysis, int start_offset);
     std::string createCodeString(std::vector<FPCode> vCodes);
@@ -50,6 +50,17 @@ private:
     std::string compress(const std::string& s);
     std::string _CodeString;
     int _NumCodes;
+
+#ifdef TEST
+public:
+    matrix_f& getSpectrogram() { return _Spectrogram; }
+    std::vector<FPCode>& getCodes() { return _Codes; }
+
+private:
+    matrix_f _Spectrogram;
+    std::vector<FPCode> _Codes;
+#endif
+
 };
 
 #endif

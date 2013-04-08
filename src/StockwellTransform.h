@@ -7,8 +7,8 @@
 
 class StockwellTransform : public SubbandAnalysis {
 public:
-    StockwellTransform(AudioStreamInput* pAudio) : SubbandAnalysis(pAudio) {}
-    StockwellTransform(const float* pSamples, uint numSamples) : SubbandAnalysis(pSamples, numSamples) {}
+    StockwellTransform(AudioStreamInput* pAudio);
+    StockwellTransform(const float* pSamples, uint numSamples);
     virtual ~StockwellTransform() {}
     virtual void Compute();
 };

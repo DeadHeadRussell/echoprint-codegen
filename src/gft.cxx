@@ -74,7 +74,7 @@ void shift(double *sig, int N, int amount) {
 }
 
 
-void gaussian(double *win, int N, int freq) {
+void gft_gaussian(double *win, int N, int freq) {
 	int i;
 	double x;
 	double sum;
@@ -93,7 +93,7 @@ void gaussian(double *win, int N, int freq) {
 }
 
 
-void box(double *win, int N, int freq) {
+void gft_box(double *win, int N, int freq) {
 	int i;
 	for (i = 0; i < N*2; i+=2) {
 		win[i] = 1.0;
@@ -171,7 +171,7 @@ int *gft_1dMusicPartitions(unsigned int N, float samplerate, int cents) {
 }
 
 
-double *windows(int N, windowFunction *window){
+double *gft_windows(int N, gftWindowFunction *window){
 	int fstart, fcentre, fwidth, fend;
 	double *fband, *fbandminus;
 	double *win, *temp;
@@ -219,7 +219,7 @@ double *windows(int N, windowFunction *window){
 }
 
 
-double *windowsFromPars(int N, windowFunction *window, int *pars){
+double *gft_windowsFromPars(int N, gftWindowFunction *window, int *pars){
 	int fstart, fcentre, fwidth, fend;
 	double *fband;
 	double *win, *temp;
@@ -299,17 +299,17 @@ void gft_1dComplex64(double *signal, unsigned int N, double *win, int *pars, int
 }
 
 
-void gft_2dComplex64(double *image, unsigned int N, unsigned int M, windowFunction *window) {
+void gft_2dComplex64(double *image, unsigned int N, unsigned int M, gftWindowFunction *window) {
 	int row, col;
 	double *win;
 	int *pars;
 	pars = gft_1dPartitions(N);
-	win = windows(N, window);
+	win = gft_windows(N, window);
 	for (row=0; row < N; row++) {
 		gft_1dComplex64(image+(row*N*2),N,win,pars,1);
 	}
 	pars = gft_1dPartitions(M);
-	win = windows(M, window);
+	win = gft_windows(M, window);
 	for (col=0; col < M; col++) {
 		gft_1dComplex64(image+(col*2),M,win,pars,N);
 	}

@@ -7,24 +7,24 @@
  *
  */
 
-typedef void (windowFunction)(double*,int,int);
+typedef void (gftWindowFunction)(double*,int,int);
 
 // Windows
-void gaussian(double *win, int N, int freq);
-void box(double *win, int N, int freq);
+void gft_gaussian(double *win, int N, int freq);
+void gft_box(double *win, int N, int freq);
 
 // GFT partition and window screen generators
 int gft_1dSizeOfPartitions(unsigned int N);
 int *gft_1dPartitions(unsigned int N);
 int *gft_1dMusicPartitions(unsigned int N, float samplerate, int cents);
-double *windows(int N, windowFunction *window);
-double *windowsFromPars(int N, windowFunction *window, int *pars);
+double *gft_windows(int N, gftWindowFunction *window);
+double *gft_windowsFromPars(int N, gftWindowFunction *window, int *pars);
 
 // 1D GFT Functions
 void gft_1dComplex64(double *signal, unsigned int N, double *win, int *pars, int stride);
 
 // 2D GFT Functions
-void gft_2dComplex64(double *signal, unsigned int N, unsigned int M, windowFunction *window);
+void gft_2dComplex64(double *signal, unsigned int N, unsigned int M, gftWindowFunction *window);
 
 // Interpolation functions
 double *gft_1d_interpolateNN(double *signal, unsigned int N, unsigned int M);

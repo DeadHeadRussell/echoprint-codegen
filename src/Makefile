@@ -1,35 +1,6 @@
-# Version of echoprint, as a list. Is expanded out
-# for various version numbers.
-EP_VERSION := 4 1 1
-VERSION := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION)).$(word 3, $(EP_VERSION))
-VERSION_MAJ := $(word 1, $(EP_VERSION))
-VERSION_COMPAT := $(word 1, $(EP_VERSION)).$(word 2, $(EP_VERSION))
-UNAME := $(shell uname -s)
-CXX=g++
-CC=gcc
-#OPTFLAGS=-g -O0
-OPTFLAGS=-O3 -DBOOST_UBLAS_NDEBUG -DNDEBUG
-BOOST_CFLAGS=-I/usr/local/include/boost-1_35
-TAGLIB_CFLAGS=`taglib-config --cflags`
-TAGLIB_LIBS=`taglib-config --libs`
-CXXFLAGS=-Wall $(BOOST_CFLAGS) $(TAGLIB_CFLAGS) -fPIC $(OPTFLAGS)
-CFLAGS=-Wall -fPIC $(OPTFLAGS)
-LDFLAGS=$(TAGLIB_LIBS) -lz -lpthread -lfftw3 $(OPTFLAGS)
-LIBNAME=libcodegen.so
-SONAME=$(LIBNAME).$(VERSION_MAJ)
+SRC=.
 
-MODULES_LIB = \
-    AudioBufferInput.o \
-    AudioStreamInput.o \
-    Base64.o \
-    Codegen.o \
-    Fingerprint.o \
-    MatrixUtility.o \
-    SubbandAnalysis.o \
-		StockwellTransform.o \
-		gft.o \
-    Whitening.o
-MODULES = $(MODULES_LIB) Metadata.o
+include ../Common.mk
 
 all: libcodegen echoprint-codegen
 
