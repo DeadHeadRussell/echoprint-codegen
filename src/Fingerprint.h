@@ -32,6 +32,8 @@ struct FPCode {
 
 unsigned int MurmurHash2 ( const void * key, int len, unsigned int seed );
 
+#include <cstdio>
+
 class Fingerprint {
 public:
     uint quantized_time_for_frame_delta(uint frame_delta);
@@ -39,7 +41,11 @@ public:
     Fingerprint(SubbandAnalysis* pSubbandAnalysis, int offset);
     void Compute();
     uint adaptiveOnsets(int ttarg, matrix_u&out, uint*&onset_counter_for_band) ;
-    std::vector<FPCode>& getCodes() { return _Codes; }
+    std::vector<FPCode>& getCodes() { 
+      
+    std::cerr << _Codes.size() << std::endl;
+
+      return _Codes; }
     matrix_f& getMatrix() { return Eb; }
 protected:
     SubbandAnalysis *_pSubbandAnalysis;

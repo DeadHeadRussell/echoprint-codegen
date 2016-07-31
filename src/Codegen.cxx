@@ -47,9 +47,13 @@ Codegen::Codegen(const float* pcm, unsigned int numSamples, int start_offset) {
     _CodeString = createCodeString(pFingerprint->getCodes());
     _NumCodes = pFingerprint->getCodes().size();
 
+    std::cerr << "Num: " << _NumCodes << std::endl;
+
 #ifdef TEST
     _Spectrogram = pSubbandAnalysis->getMatrix();
     _Codes = pFingerprint->getCodes();
+    std::cerr << "Num: " << _Codes.size() << std::endl;
+
 #endif
 
     delete pFingerprint;

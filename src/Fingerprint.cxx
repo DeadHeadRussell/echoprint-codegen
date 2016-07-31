@@ -179,7 +179,6 @@ uint Fingerprint::quantized_time_for_frame_absolute(uint frame) {
     return ((int)rint((time_for_frame * 1000.0) /  (float)QUANTIZE_A_S) * QUANTIZE_A_S) / floor(QUANTIZE_A_S*1000.0);
 }
 
-
 void Fingerprint::Compute() {
     uint actual_codes = 0;
     unsigned char hash_material[5];

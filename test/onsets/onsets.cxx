@@ -18,9 +18,16 @@ void outputCallback(ostream& writer, Codegen* codegen) {
 
   cerr << "Computed " << number_codes << " codes" << endl;
 
+  uint pf = -1;
+  uint pb = -1;
+
   for (uint i = 0; i < number_codes; i++) {
     FPCode& code = codes.at(i);
-    writer << code.frame_actual << " " << code.band << endl;
+    if (code.frame_actual != pf || code.band != pb) {
+      writer << code.frame_actual << ' ' << code.band << endl;
+      pf = code.frame_actual;
+      pb = code.band;
+    }
   }
 }
 
